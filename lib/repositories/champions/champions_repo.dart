@@ -14,7 +14,7 @@ class ChampionRepo extends BaseChampionRepo {
         await http.get(Uri.parse('${ApiHelper.baseUrl}/champion.json'));
 
     try {
-      var rsp = jsonDecode(response.body);
+      var rsp = jsonDecode(utf8.decode(response.bodyBytes));
       Map data = rsp['data'];
 
       List<Champion> champions = [];
@@ -23,6 +23,22 @@ class ChampionRepo extends BaseChampionRepo {
         champions.add(champion);
       }
       return champions;
+    } on PlatformException catch (err) {
+      throw Failure(code: err.code, message: err.message!);
+    }
+  }
+
+  @override
+  Future<Champion?> getChampion(String id) async {
+    final response =
+        await http.get(Uri.parse('${ApiHelper.championUrl}/$id.json'));
+
+    try {
+      var rsp = jsonDecode(utf8.decode(response.bodyBytes));
+      var data = rsp['data'][id];
+      var champion = Champion.fromMap(data);
+
+      return champion;
     } on PlatformException catch (err) {
       throw Failure(code: err.code, message: err.message!);
     }

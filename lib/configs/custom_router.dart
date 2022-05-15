@@ -1,9 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:lolspy/screens/screens.dart';
 
 class CustomRouter {
   static Route onGenerateRoute(RouteSettings settings) {
-    print('Route: ${settings.name}');
+    log('Route: ${settings.name}');
 
     switch (settings.name) {
       case '/':
@@ -13,13 +15,16 @@ class CustomRouter {
         );
       case ChampionsScreen.routeName:
         return ChampionsScreen.route();
+      case ChampionScreen.routeName:
+        return ChampionScreen.route(
+            args: settings.arguments as ChampionScreenArgs);
       default:
         return _errorRoute();
     }
   }
 
   static Route onGenerateNestedRoute(RouteSettings settings) {
-    print('Nested Route: ${settings.name}');
+    log('Nested Route: ${settings.name}');
     switch (settings.name) {
       default:
         return _errorRoute();

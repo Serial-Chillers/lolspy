@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../models/models.dart';
@@ -12,7 +14,7 @@ class ChampionsScreenCubit extends Cubit<ChampionsScreenState> {
         super(ChampionsScreenState.initial());
 
   void getChampions() async {
-    print('getChampions');
+    log('getChampions');
     emit(state.copyWith(status: ChampionsScreenStatus.loading));
     try {
       var champions = await _championRepo.getChampions();

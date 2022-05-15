@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'models.dart';
 
 class Champion {
+  final String id;
   final String key;
   final String name;
   final String title;
@@ -10,6 +11,7 @@ class Champion {
   final Image image;
 
   Champion({
+    required this.id,
     required this.key,
     required this.name,
     required this.title,
@@ -18,6 +20,7 @@ class Champion {
   });
 
   Champion copyWith({
+    String? id,
     String? key,
     String? name,
     String? title,
@@ -25,6 +28,7 @@ class Champion {
     Image? image,
   }) {
     return Champion(
+      id: id ?? this.id,
       key: key ?? this.key,
       name: name ?? this.name,
       title: title ?? this.title,
@@ -36,6 +40,7 @@ class Champion {
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
 
+    result.addAll({'id': id});
     result.addAll({'key': key});
     result.addAll({'name': name});
     result.addAll({'title': title});
@@ -47,6 +52,7 @@ class Champion {
 
   factory Champion.fromMap(Map<String, dynamic> map) {
     return Champion(
+      id: map['id'] ?? '',
       key: map['key'] ?? '',
       name: map['name'] ?? '',
       title: map['title'] ?? '',
@@ -62,7 +68,7 @@ class Champion {
 
   @override
   String toString() {
-    return 'Champion(key: $key, name: $name, title: $title, blurb: $blurb, image: $image)';
+    return 'Champion(id: $id, key: $key, name: $name, title: $title, blurb: $blurb, image: $image)';
   }
 
   @override
@@ -70,6 +76,7 @@ class Champion {
     if (identical(this, other)) return true;
 
     return other is Champion &&
+        other.id == id &&
         other.key == key &&
         other.name == name &&
         other.title == title &&
@@ -79,7 +86,8 @@ class Champion {
 
   @override
   int get hashCode {
-    return key.hashCode ^
+    return id.hashCode ^
+        key.hashCode ^
         name.hashCode ^
         title.hashCode ^
         blurb.hashCode ^

@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
       // child: MultiBlocProvider(
       //   providers: [],
       child: const MaterialApp(
+        debugShowCheckedModeBanner: false,
         onGenerateRoute: CustomRouter.onGenerateRoute,
         initialRoute: ChampionsScreen.routeName,
       ),
