@@ -1,15 +1,20 @@
 import 'dart:convert';
 
+import 'models.dart';
+
 class Champion {
   final String key;
   final String name;
   final String title;
   final String blurb;
+  final Image image;
+
   Champion({
     required this.key,
     required this.name,
     required this.title,
     required this.blurb,
+    required this.image,
   });
 
   Champion copyWith({
@@ -17,12 +22,14 @@ class Champion {
     String? name,
     String? title,
     String? blurb,
+    Image? image,
   }) {
     return Champion(
       key: key ?? this.key,
       name: name ?? this.name,
       title: title ?? this.title,
       blurb: blurb ?? this.blurb,
+      image: image ?? this.image,
     );
   }
 
@@ -33,6 +40,7 @@ class Champion {
     result.addAll({'name': name});
     result.addAll({'title': title});
     result.addAll({'blurb': blurb});
+    result.addAll({'image': image.toMap()});
 
     return result;
   }
@@ -43,6 +51,7 @@ class Champion {
       name: map['name'] ?? '',
       title: map['title'] ?? '',
       blurb: map['blurb'] ?? '',
+      image: Image.fromMap(map['image']),
     );
   }
 
@@ -53,7 +62,7 @@ class Champion {
 
   @override
   String toString() {
-    return 'Champion(key: $key, name: $name, title: $title, blurb: $blurb)';
+    return 'Champion(key: $key, name: $name, title: $title, blurb: $blurb, image: $image)';
   }
 
   @override
@@ -64,11 +73,16 @@ class Champion {
         other.key == key &&
         other.name == name &&
         other.title == title &&
-        other.blurb == blurb;
+        other.blurb == blurb &&
+        other.image == image;
   }
 
   @override
   int get hashCode {
-    return key.hashCode ^ name.hashCode ^ title.hashCode ^ blurb.hashCode;
+    return key.hashCode ^
+        name.hashCode ^
+        title.hashCode ^
+        blurb.hashCode ^
+        image.hashCode;
   }
 }
