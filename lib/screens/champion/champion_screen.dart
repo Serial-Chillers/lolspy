@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:lolspy/helpers/helpers.dart';
-import 'package:lolspy/screens/champion/cubit/champion_screen_cubit.dart';
 import 'package:lolspy/helpers/api_helpers/api_helpers.dart';
+import 'package:lolspy/screens/champion/cubit/champion_screen_cubit.dart';
 import '../../repositories/repositories.dart';
+import 'widgets/splash_swiper.dart';
 
 class ChampionScreenArgs {
   final String id;
@@ -36,26 +36,47 @@ class ChampionScreen extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title: Text('champ'),
+            title: const Text('champ'),
           ),
           body: state.status == ChampionScreenStatus.loading
               ? const Center(
                   child: CircularProgressIndicator(),
                 )
               : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CachedNetworkImage(
-                      imageUrl:
-                          'http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${state.champion!.id}_0.jpg',
-                      placeholder: (context, url) =>
-                          const Center(child: CircularProgressIndicator()),
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
+                    SplashSwiper(
+                      id: state.champion!.id,
+                      skins: state.champion!.skins!,
                     ),
-                    Text(state.champion!.id),
-                    Text(state.champion!.key),
-                    Text(state.champion!.name),
-                    Text(state.champion!.title),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                              '${state.champion!.name} - ${state.champion!.title}'),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              CachedNetworkImage(
+                                imageUrl: ApiHelper.getSkillImage(
+                                    fileName:
+                                        state.champion!.spells![0]!.image.full),
+                              ),
+                              ...state.champion!.spells!.map(
+                                (e) => CachedNetworkImage(
+                                  imageUrl: ApiHelper.getSkillImage(
+                                      fileName: e!.image.full),
+                                ),
+                              )
+                            ],
+                          ),
+                          Text(state.champion!.spells![0]!.name),
+                          Text(state.champion!.spells![0]!.description),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
         );

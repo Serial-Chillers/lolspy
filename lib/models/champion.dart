@@ -1,5 +1,9 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+
+import 'package:lolspy/models/spell.dart';
+
 import 'models.dart';
 
 class Champion {
@@ -9,6 +13,8 @@ class Champion {
   final String title;
   final String blurb;
   final Image image;
+  final List<Skin?>? skins;
+  final List<Spell?>? spells;
 
   Champion({
     required this.id,
@@ -17,6 +23,8 @@ class Champion {
     required this.title,
     required this.blurb,
     required this.image,
+    this.skins,
+    this.spells,
   });
 
   Champion copyWith({
@@ -26,6 +34,8 @@ class Champion {
     String? title,
     String? blurb,
     Image? image,
+    List<Skin?>? skins,
+    List<Spell?>? spells,
   }) {
     return Champion(
       id: id ?? this.id,
@@ -34,6 +44,8 @@ class Champion {
       title: title ?? this.title,
       blurb: blurb ?? this.blurb,
       image: image ?? this.image,
+      skins: skins ?? this.skins,
+      spells: spells ?? this.spells,
     );
   }
 
@@ -46,6 +58,12 @@ class Champion {
     result.addAll({'title': title});
     result.addAll({'blurb': blurb});
     result.addAll({'image': image.toMap()});
+    if (skins != null) {
+      result.addAll({'skins': skins!.map((x) => x?.toMap()).toList()});
+    }
+    if (spells != null) {
+      result.addAll({'spells': spells!.map((x) => x?.toMap()).toList()});
+    }
 
     return result;
   }
@@ -58,6 +76,12 @@ class Champion {
       title: map['title'] ?? '',
       blurb: map['blurb'] ?? '',
       image: Image.fromMap(map['image']),
+      skins: map['skins'] != null
+          ? List<Skin?>.from(map['skins']?.map((x) => Skin?.fromMap(x)))
+          : null,
+      spells: map['spells'] != null
+          ? List<Spell?>.from(map['spells']?.map((x) => Spell?.fromMap(x)))
+          : null,
     );
   }
 
@@ -68,7 +92,7 @@ class Champion {
 
   @override
   String toString() {
-    return 'Champion(id: $id, key: $key, name: $name, title: $title, blurb: $blurb, image: $image)';
+    return 'Champion(id: $id, key: $key, name: $name, title: $title, blurb: $blurb, image: $image, skins: $skins, spells: $spells)';
   }
 
   @override
@@ -81,7 +105,9 @@ class Champion {
         other.name == name &&
         other.title == title &&
         other.blurb == blurb &&
-        other.image == image;
+        other.image == image &&
+        listEquals(other.skins, skins) &&
+        listEquals(other.spells, spells);
   }
 
   @override
@@ -91,6 +117,8 @@ class Champion {
         name.hashCode ^
         title.hashCode ^
         blurb.hashCode ^
-        image.hashCode;
+        image.hashCode ^
+        skins.hashCode ^
+        spells.hashCode;
   }
 }
