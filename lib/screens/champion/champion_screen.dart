@@ -2,7 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lolspy/helpers/api_helpers/api_helpers.dart';
+import 'package:lolspy/models/models.dart';
 import 'package:lolspy/screens/champion/cubit/champion_screen_cubit.dart';
+import 'package:lolspy/screens/champion/widgets/spell_widget.dart';
 import '../../repositories/repositories.dart';
 import 'widgets/splash_swiper.dart';
 
@@ -60,20 +62,22 @@ class ChampionScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               CachedNetworkImage(
-                                imageUrl: ApiHelper.getSkillImage(
+                                imageUrl: ApiHelper.getPassiveImage(
                                     fileName:
-                                        state.champion!.spells![0]!.image.full),
+                                        state.champion!.passive!.image.full),
                               ),
                               ...state.champion!.spells!.map(
                                 (e) => CachedNetworkImage(
                                   imageUrl: ApiHelper.getSkillImage(
-                                      fileName: e!.image.full),
+                                      fileName: e.image.full),
                                 ),
                               )
                             ],
                           ),
-                          Text(state.champion!.spells![0]!.name),
-                          Text(state.champion!.spells![0]!.description),
+                          SpellWidget(
+                            spell: state.champion!.spells![3],
+                          ),
+                          Text(state.champion!.lore!),
                         ],
                       ),
                     ),

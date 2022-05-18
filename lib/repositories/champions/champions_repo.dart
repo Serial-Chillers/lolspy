@@ -11,7 +11,7 @@ class ChampionRepo extends BaseChampionRepo {
   @override
   Future<List<Champion>?> getChampions() async {
     final response =
-        await http.get(Uri.parse('${ApiHelper.baseUrl}/champion.json'));
+        await http.get(Uri.parse('${ApiHelper.dataUrl}/champion.json'));
 
     try {
       var rsp = jsonDecode(utf8.decode(response.bodyBytes));

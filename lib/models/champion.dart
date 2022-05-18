@@ -13,8 +13,12 @@ class Champion {
   final String title;
   final String blurb;
   final Image image;
-  final List<Skin?>? skins;
-  final List<Spell?>? spells;
+  final String? lore;
+  final List<Skin>? skins;
+  final List<Spell>? spells;
+  final Passive? passive;
+  final List<String?>? allytips;
+  final List<String?>? enemytips;
 
   Champion({
     required this.id,
@@ -23,8 +27,12 @@ class Champion {
     required this.title,
     required this.blurb,
     required this.image,
+    required this.lore,
     this.skins,
     this.spells,
+    this.passive,
+    this.allytips,
+    this.enemytips,
   });
 
   Champion copyWith({
@@ -34,8 +42,12 @@ class Champion {
     String? title,
     String? blurb,
     Image? image,
-    List<Skin?>? skins,
-    List<Spell?>? spells,
+    String? lore,
+    List<Skin>? skins,
+    List<Spell>? spells,
+    Passive? passive,
+    List<String?>? allytips,
+    List<String?>? enemytips,
   }) {
     return Champion(
       id: id ?? this.id,
@@ -44,8 +56,12 @@ class Champion {
       title: title ?? this.title,
       blurb: blurb ?? this.blurb,
       image: image ?? this.image,
+      lore: lore ?? this.lore,
       skins: skins ?? this.skins,
       spells: spells ?? this.spells,
+      passive: passive ?? this.passive,
+      allytips: allytips ?? this.allytips,
+      enemytips: enemytips ?? this.enemytips,
     );
   }
 
@@ -58,11 +74,23 @@ class Champion {
     result.addAll({'title': title});
     result.addAll({'blurb': blurb});
     result.addAll({'image': image.toMap()});
+    if (lore != null) {
+      result.addAll({'lore': lore});
+    }
     if (skins != null) {
       result.addAll({'skins': skins!.map((x) => x?.toMap()).toList()});
     }
     if (spells != null) {
       result.addAll({'spells': spells!.map((x) => x?.toMap()).toList()});
+    }
+    if (passive != null) {
+      result.addAll({'passive': passive!.toMap()});
+    }
+    if (allytips != null) {
+      result.addAll({'allytips': allytips!.map((x) => x).toList()});
+    }
+    if (enemytips != null) {
+      result.addAll({'enemytips': enemytips!.map((x) => x).toList()});
     }
 
     return result;
@@ -76,11 +104,19 @@ class Champion {
       title: map['title'] ?? '',
       blurb: map['blurb'] ?? '',
       image: Image.fromMap(map['image']),
+      lore: map['lore'],
       skins: map['skins'] != null
-          ? List<Skin?>.from(map['skins']?.map((x) => Skin?.fromMap(x)))
+          ? List<Skin>.from(map['skins']?.map((x) => Skin.fromMap(x)))
           : null,
       spells: map['spells'] != null
-          ? List<Spell?>.from(map['spells']?.map((x) => Spell?.fromMap(x)))
+          ? List<Spell>.from(map['spells']?.map((x) => Spell.fromMap(x)))
+          : null,
+      passive: map['passive'] != null ? Passive.fromMap(map['passive']) : null,
+      allytips: map['allytips'] != null
+          ? List<String?>.from(map['allytips']?.map((x) => x))
+          : null,
+      enemytips: map['enemytips'] != null
+          ? List<String?>.from(map['enemytips']?.map((x) => x))
           : null,
     );
   }
@@ -92,7 +128,7 @@ class Champion {
 
   @override
   String toString() {
-    return 'Champion(id: $id, key: $key, name: $name, title: $title, blurb: $blurb, image: $image, skins: $skins, spells: $spells)';
+    return 'Champion(id: $id, key: $key, name: $name, title: $title, blurb: $blurb, image: $image, lore: $lore, skins: $skins, spells: $spells, passive: $passive, allytips: $allytips, enemytips: $enemytips)';
   }
 
   @override
@@ -106,8 +142,12 @@ class Champion {
         other.title == title &&
         other.blurb == blurb &&
         other.image == image &&
+        other.lore == lore &&
         listEquals(other.skins, skins) &&
-        listEquals(other.spells, spells);
+        listEquals(other.spells, spells) &&
+        other.passive == passive &&
+        listEquals(other.allytips, allytips) &&
+        listEquals(other.enemytips, enemytips);
   }
 
   @override
@@ -118,7 +158,11 @@ class Champion {
         title.hashCode ^
         blurb.hashCode ^
         image.hashCode ^
+        lore.hashCode ^
         skins.hashCode ^
-        spells.hashCode;
+        spells.hashCode ^
+        passive.hashCode ^
+        allytips.hashCode ^
+        enemytips.hashCode;
   }
 }
