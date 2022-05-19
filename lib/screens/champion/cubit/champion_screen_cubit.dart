@@ -20,9 +20,15 @@ class ChampionScreenCubit extends Cubit<ChampionScreenState> {
     try {
       var champion = await _championRepo.getChampion(id);
       emit(state.copyWith(
-          champion: champion, status: ChampionScreenStatus.idle));
+          champion: champion,
+          status: ChampionScreenStatus.idle,
+          spell: champion!.spells![0]));
     } on Failure catch (err) {
       emit(state.copyWith(status: ChampionScreenStatus.error, failure: err));
     }
+  }
+
+  void setSpell(Spell spell) {
+    emit(state.copyWith(spell: spell));
   }
 }

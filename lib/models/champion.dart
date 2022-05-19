@@ -2,8 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
-import 'package:lolspy/models/spell.dart';
-
 import 'models.dart';
 
 class Champion {

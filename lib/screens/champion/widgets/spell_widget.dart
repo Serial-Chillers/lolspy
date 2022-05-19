@@ -13,8 +13,19 @@ class SpellWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(spell.name),
-        Text(spell.description),
+        Text(
+          spell.name,
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Text(
+          spell.description,
+          style: const TextStyle(
+            fontSize: 16,
+          ),
+        ),
       ],
     );
   }

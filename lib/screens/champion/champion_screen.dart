@@ -1,11 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:lolspy/helpers/api_helpers/api_helpers.dart';
-import 'package:lolspy/models/models.dart';
 import 'package:lolspy/screens/champion/cubit/champion_screen_cubit.dart';
 import 'package:lolspy/screens/champion/widgets/spell_widget.dart';
+
 import '../../repositories/repositories.dart';
+import 'widgets/champion_lore.dart';
 import 'widgets/splash_swiper.dart';
 
 class ChampionScreenArgs {
@@ -34,6 +36,7 @@ class ChampionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var cubit = context.read<ChampionScreenCubit>();
     return BlocBuilder<ChampionScreenCubit, ChampionScreenState>(
       builder: (context, state) {
         return Scaffold(
@@ -67,17 +70,28 @@ class ChampionScreen extends StatelessWidget {
                                         state.champion!.passive!.image.full),
                               ),
                               ...state.champion!.spells!.map(
-                                (e) => CachedNetworkImage(
-                                  imageUrl: ApiHelper.getSkillImage(
-                                      fileName: e.image.full),
+                                (spell) => InkWell(
+                                  onTap: () {
+                                    cubit.setSpell(spell);
+                                  },
+                                  child: CachedNetworkImage(
+                                    imageUrl: ApiHelper.getSkillImage(
+                                        fileName: spell.image.full),
+                                  ),
                                 ),
                               )
                             ],
                           ),
-                          SpellWidget(
-                            spell: state.champion!.spells![3],
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: SpellWidget(
+                              spell: state.spell!,
+                            ),
                           ),
-                          Text(state.champion!.lore!),
+                          ChampionLore(
+                            lore: state.champion!.lore!,
+                            blurd: state.champion!.blurb,
+                          ),
                         ],
                       ),
                     ),
